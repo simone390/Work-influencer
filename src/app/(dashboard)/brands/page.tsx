@@ -1,24 +1,74 @@
-import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { it } from 'date-fns/locale'
 
-export default async function BrandsPage() {
-  const session = await getServerSession(authOptions)
+interface Brand {
+  id: string
+  name: string
+  logo?: string | null
+  publicToken: string
+  createdAt: string
+  _count: { partnerships: number }
+}
 
-  if (!session?.user || session.user.role !== 'MANAGER') {
-    redirect('/dashboard')
+export default function BrandsPage() {
+  const [brands, setBrands] = useState<Brand[]>([])
+  const [loading, setLoading] = useState(true)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  const fetchBrands = useCallback(async () => {
+    try {
+      const res = await fetch('/api/brands')
+      if (res.ok) {
+        const data = await res.json()
+        setBrands(data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch brands', err)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchBrands()
+  }, [fetchBrands])
+
+  async function handleDelete(brand: Brand) {
+    const confirmed = window.confirm(
+      `Sei sicuro di voler eliminare il brand "${brand.name}"? Questa azione non può essere annullata.`
+    )
+    if (!confirmed) return
+
+    setDeletingId(brand.id)
+    setError(null)
+    try {
+      const res = await fetch(`/api/brands/${brand.id}`, { method: 'DELETE' })
+      if (res.ok) {
+        setBrands((prev) => prev.filter((b) => b.id !== brand.id))
+      } else {
+        const data = await res.json()
+        setError(data.error || 'Errore durante l\'eliminazione')
+      }
+    } catch (err) {
+      console.error('Failed to delete brand', err)
+      setError('Errore nella comunicazione con il server')
+    } finally {
+      setDeletingId(null)
+    }
   }
 
-  const brands = await prisma.brand.findMany({
-    orderBy: { name: 'asc' },
-    include: {
-      _count: { select: { partnerships: true } },
-    },
-  })
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-24">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -39,6 +89,12 @@ export default async function BrandsPage() {
           Nuovo Brand
         </Link>
       </div>
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
 
       {brands.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
@@ -69,6 +125,9 @@ export default async function BrandsPage() {
                 </th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Link Pubblico
+                </th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Azioni
                 </th>
               </tr>
             </thead>
@@ -105,6 +164,30 @@ export default async function BrandsPage() {
                     >
                       Apri vista brand →
                     </Link>
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => handleDelete(brand)}
+                      disabled={deletingId === brand.id}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {deletingId === brand.id ? (
+                        <>
+                          <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Eliminando...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Elimina
+                        </>
+                      )}
+                    </button>
                   </td>
                 </tr>
               ))}

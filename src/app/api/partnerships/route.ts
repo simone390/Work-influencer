@@ -22,6 +22,9 @@ const createPartnershipSchema = z.object({
   influencerId: z.string().min(1),
   totalPrice: z.number().positive(),
   brief: z.string().optional(),
+  campaignType: z.string().optional(),
+  campaignObjective: z.string().optional(),
+  campaignScript: z.string().optional(),
   contents: z.array(contentSchema).min(1),
 })
 
@@ -88,7 +91,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { name, brandId, influencerId, totalPrice, brief, contents } =
+    const { name, brandId, influencerId, totalPrice, brief, campaignType, campaignObjective, campaignScript, contents } =
       parsed.data
     const netPrice = totalPrice * 0.8
 
@@ -117,6 +120,9 @@ export async function POST(req: NextRequest) {
         totalPrice,
         netPrice,
         brief,
+        campaignType: campaignType || null,
+        campaignObjective: campaignObjective || null,
+        campaignScript: campaignScript || null,
         status: 'ACTIVE',
       },
     })

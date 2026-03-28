@@ -18,6 +18,8 @@ model User {
   createdAt     DateTime       @default(now())
   partnerships  Partnership[]
   notifications Notification[]
+  invoices      Invoice[]
+  sentMessages  Message[]
 }
 
 model Brand {
@@ -27,21 +29,28 @@ model Brand {
   publicToken  String        @unique @default(cuid())
   createdAt    DateTime      @default(now())
   partnerships Partnership[]
+  sales        BrandSale[]
 }
 
 model Partnership {
-  id           String     @id @default(cuid())
-  name         String
-  brandId      String
-  influencerId String
-  totalPrice   Float
-  netPrice     Float
-  brief        String?
-  status       String     @default("ACTIVE")
-  createdAt    DateTime   @default(now())
-  brand        Brand      @relation(fields: [brandId], references: [id])
-  influencer   User       @relation(fields: [influencerId], references: [id])
-  contents     Content[]
+  id                String     @id @default(cuid())
+  name              String
+  brandId           String
+  influencerId      String
+  totalPrice        Float
+  netPrice          Float
+  brief             String?
+  status            String     @default("ACTIVE")
+  campaignType      String?
+  campaignObjective String?
+  campaignScript    String?
+  createdAt         DateTime   @default(now())
+  brand             Brand      @relation(fields: [brandId], references: [id])
+  influencer        User       @relation(fields: [influencerId], references: [id])
+  contents          Content[]
+  invoice           Invoice?
+  sales             BrandSale[]
+  messages          Message[]
 }
 
 model Content {
@@ -89,4 +98,46 @@ model Notification {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Invoice {
+  id            String      @id @default(cuid())
+  partnershipId String      @unique
+  influencerId  String
+  amount        Float
+  fileUrl       String?
+  fileName      String?
+  status        String      @default("PENDING")
+  submittedAt   DateTime?
+  paidAt        DateTime?
+  notes         String?
+  createdAt     DateTime    @default(now())
+  partnership   Partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
+  influencer    User        @relation(fields: [influencerId], references: [id])
+}
+
+model BrandSale {
+  id            String      @id @default(cuid())
+  brandId       String
+  partnershipId String?
+  amount        Float
+  date          DateTime
+  notes         String?
+  createdAt     DateTime    @default(now())
+  brand         Brand       @relation(fields: [brandId], references: [id])
+  partnership   Partnership? @relation(fields: [partnershipId], references: [id])
+}
+
+model Message {
+  id            String      @id @default(cuid())
+  partnershipId String
+  senderId      String
+  senderName    String
+  senderRole    String
+  content       String?
+  fileUrl       String?
+  fileName      String?
+  createdAt     DateTime    @default(now())
+  partnership   Partnership @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
+  sender        User        @relation(fields: [senderId], references: [id])
 }

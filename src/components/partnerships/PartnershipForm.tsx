@@ -33,6 +33,15 @@ interface PartnershipFormProps {
   influencers: Influencer[]
 }
 
+const campaignTypeOptions = [
+  { value: '', label: 'Seleziona tipo campagna' },
+  { value: 'PRODUCT_REVIEW', label: 'Recensione Prodotto' },
+  { value: 'UNBOXING', label: 'Unboxing' },
+  { value: 'TUTORIAL', label: 'Tutorial' },
+  { value: 'LIFESTYLE', label: 'Lifestyle' },
+  { value: 'OTHER', label: 'Altro' },
+]
+
 const contentTypeOptions = [
   { value: 'REEL', label: 'Reel' },
   { value: 'STORY', label: 'Story' },
@@ -62,6 +71,9 @@ export function PartnershipForm({ brands, influencers }: PartnershipFormProps) {
     influencerId: '',
     totalPrice: '',
     brief: '',
+    campaignType: '',
+    campaignObjective: '',
+    campaignScript: '',
   })
 
   const [contents, setContents] = useState<ContentFormData[]>([{ ...defaultContent }])
@@ -136,6 +148,9 @@ export function PartnershipForm({ brands, influencers }: PartnershipFormProps) {
         influencerId: formData.influencerId,
         totalPrice: parseFloat(formData.totalPrice),
         brief: formData.brief.trim(),
+        campaignType: formData.campaignType || undefined,
+        campaignObjective: formData.campaignObjective.trim() || undefined,
+        campaignScript: formData.campaignScript.trim() || undefined,
         contents: contents.map((c) => ({
           type: c.type,
           description: c.description.trim(),
@@ -243,6 +258,44 @@ export function PartnershipForm({ brands, influencers }: PartnershipFormProps) {
               onChange={(e) => handleChange('brief', e.target.value)}
               placeholder="Descrivi gli obiettivi e le aspettative della campagna..."
               rows={4}
+            />
+          </div>
+        </div>
+      </Card>
+
+      {/* Campaign Type */}
+      <Card>
+        <h2 className="text-base font-semibold text-gray-900 mb-4">
+          Tipo di Campagna
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <Select
+              label="Tipo di Campagna"
+              value={formData.campaignType}
+              onChange={(e) => handleChange('campaignType', e.target.value)}
+              options={campaignTypeOptions}
+              placeholder="Seleziona tipo campagna"
+            />
+          </div>
+
+          <div className="sm:col-span-2">
+            <Textarea
+              label="Obiettivo Campagna"
+              value={formData.campaignObjective}
+              onChange={(e) => handleChange('campaignObjective', e.target.value)}
+              placeholder="Descrivi l'obiettivo principale della campagna..."
+              rows={3}
+            />
+          </div>
+
+          <div className="sm:col-span-2">
+            <Textarea
+              label="Script / Brief Dettagliato"
+              value={formData.campaignScript}
+              onChange={(e) => handleChange('campaignScript', e.target.value)}
+              placeholder="Inserisci lo script o il brief dettagliato per l'influencer..."
+              rows={5}
             />
           </div>
         </div>
