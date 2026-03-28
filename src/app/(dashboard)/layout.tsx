@@ -16,11 +16,11 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f5f7' }}>
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
         <Header />
-        <main className="flex-1 p-6 overflow-auto">
+        <main style={{ flex: 1, padding: '28px', overflowY: 'auto' }}>
           {children}
         </main>
       </div>

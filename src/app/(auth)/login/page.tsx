@@ -39,74 +39,150 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo/Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-primary-600 rounded-2xl shadow-lg mb-4">
-            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+    <div
+      style={{
+        minHeight: '100vh',
+        background: '#f5f5f7',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif',
+      }}
+    >
+      <div style={{ width: '100%', maxWidth: '420px' }}>
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '56px',
+              height: '56px',
+              background: 'linear-gradient(135deg, #0071e3 0%, #005bb5 100%)',
+              borderRadius: '16px',
+              marginBottom: '16px',
+              boxShadow: '0 4px 16px rgba(0, 113, 227, 0.3)',
+            }}
+          >
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Influencer Manager</h1>
-          <p className="text-gray-500 mt-1 text-sm">Accedi per gestire le tue collaborazioni</p>
+          <h1
+            style={{
+              fontSize: '26px',
+              fontWeight: 700,
+              color: '#1d1d1f',
+              letterSpacing: '-0.03em',
+              marginBottom: '6px',
+            }}
+          >
+            Influencer Manager
+          </h1>
+          <p style={{ fontSize: '15px', color: '#6e6e73' }}>
+            Accedi per gestire le tue collaborazioni
+          </p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Accedi</h2>
-
+        <div
+          style={{
+            background: '#ffffff',
+            borderRadius: '18px',
+            boxShadow: '0 2px 20px rgba(0,0,0,0.08)',
+            padding: '36px',
+            border: '1px solid #f0f0f0',
+          }}
+        >
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-700">{error}</p>
+            <div
+              style={{
+                marginBottom: '20px',
+                padding: '12px 16px',
+                background: '#fff2f1',
+                border: '1px solid rgba(255, 59, 48, 0.2)',
+                borderRadius: '10px',
+              }}
+            >
+              <p style={{ fontSize: '13.5px', color: '#ff3b30', fontWeight: 500 }}>{error}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="nome@esempio.com"
-              required
-              autoComplete="email"
-            />
-
-            <Input
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              autoComplete="current-password"
-            />
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '16px' }}>
+              <Input
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="nome@esempio.com"
+                required
+                autoComplete="email"
+              />
+            </div>
+            <div style={{ marginBottom: '24px' }}>
+              <Input
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                autoComplete="current-password"
+              />
+            </div>
 
             <Button
               type="submit"
               className="w-full"
               size="lg"
               loading={loading}
+              style={{ width: '100%', justifyContent: 'center' }}
             >
               Accedi
             </Button>
           </form>
 
           {/* Demo credentials */}
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs text-gray-500 text-center mb-3">Credenziali di demo</p>
-            <div className="grid grid-cols-2 gap-3">
+          <div
+            style={{
+              marginTop: '24px',
+              paddingTop: '24px',
+              borderTop: '1px solid #f0f0f0',
+            }}
+          >
+            <p style={{ fontSize: '12px', color: '#8e8e93', textAlign: 'center', marginBottom: '12px' }}>
+              Credenziali di demo
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <button
                 type="button"
                 onClick={() => {
                   setEmail('manager@test.com')
                   setPassword('password123')
                 }}
-                className="text-left px-3 py-2 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-colors"
+                style={{
+                  textAlign: 'left',
+                  padding: '10px 14px',
+                  background: '#f5f5f7',
+                  borderRadius: '10px',
+                  border: '1px solid transparent',
+                  cursor: 'pointer',
+                  transition: 'all 200ms ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#0071e3'
+                  e.currentTarget.style.background = '#e8f0fd'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'transparent'
+                  e.currentTarget.style.background = '#f5f5f7'
+                }}
               >
-                <p className="text-xs font-medium text-gray-700">Manager</p>
-                <p className="text-xs text-gray-500">manager@test.com</p>
+                <p style={{ fontSize: '12px', fontWeight: 600, color: '#1d1d1f', marginBottom: '2px' }}>Manager</p>
+                <p style={{ fontSize: '11px', color: '#6e6e73' }}>manager@test.com</p>
               </button>
               <button
                 type="button"
@@ -114,10 +190,26 @@ export default function LoginPage() {
                   setEmail('influencer@test.com')
                   setPassword('password123')
                 }}
-                className="text-left px-3 py-2 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-colors"
+                style={{
+                  textAlign: 'left',
+                  padding: '10px 14px',
+                  background: '#f5f5f7',
+                  borderRadius: '10px',
+                  border: '1px solid transparent',
+                  cursor: 'pointer',
+                  transition: 'all 200ms ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#0071e3'
+                  e.currentTarget.style.background = '#e8f0fd'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'transparent'
+                  e.currentTarget.style.background = '#f5f5f7'
+                }}
               >
-                <p className="text-xs font-medium text-gray-700">Influencer</p>
-                <p className="text-xs text-gray-500">influencer@test.com</p>
+                <p style={{ fontSize: '12px', fontWeight: 600, color: '#1d1d1f', marginBottom: '2px' }}>Influencer</p>
+                <p style={{ fontSize: '11px', color: '#6e6e73' }}>influencer@test.com</p>
               </button>
             </div>
           </div>

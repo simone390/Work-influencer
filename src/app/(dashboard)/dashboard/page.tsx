@@ -15,7 +15,6 @@ export default async function DashboardPage() {
   const isManager = session.user.role === 'MANAGER'
 
   if (isManager) {
-    // Manager dashboard
     const [
       totalPartnerships,
       activePartnerships,
@@ -70,32 +69,35 @@ export default async function DashboardPage() {
     const totalNet = priceAgg._sum.netPrice || 0
 
     return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 text-sm mt-1">
+      <div style={{ maxWidth: '1200px' }}>
+        {/* Page header */}
+        <div style={{ marginBottom: '28px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#1d1d1f', letterSpacing: '-0.03em', marginBottom: '4px' }}>
+            Dashboard
+          </h1>
+          <p style={{ fontSize: '15px', color: '#6e6e73' }}>
             Benvenuto, {session.user.name}
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Stats grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '24px' }}>
           <StatCard
             title="Partnership Totali"
             value={totalPartnerships}
             icon={
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             }
           />
           <StatCard
             title="Partnership Attive"
             value={activePartnerships}
-            colorClass="text-blue-600"
+            colorClass="text-[#0071e3]"
             icon={
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             }
           />
@@ -103,57 +105,85 @@ export default async function DashboardPage() {
             title="Fatturato Totale"
             value={`€${totalRevenue.toLocaleString('it-IT')}`}
             subtitle={`Netto: €${totalNet.toLocaleString('it-IT')}`}
-            colorClass="text-green-600"
+            colorClass="text-[#34c759]"
             icon={
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             }
           />
           <StatCard
             title="Approvazioni Pending"
             value={pendingApprovals.length}
-            colorClass="text-orange-600"
+            colorClass="text-[#ff9500]"
             icon={
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             }
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
           {/* Pending approvals */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold text-gray-900">Approvazioni in Attesa</h2>
+          <div
+            style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              border: '1px solid #f0f0f0',
+              padding: '20px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#1d1d1f' }}>Approvazioni in Attesa</h2>
               {pendingApprovals.length > 0 && (
-                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
+                <span
+                  style={{
+                    fontSize: '11px',
+                    background: '#fff3e0',
+                    color: '#ff9500',
+                    padding: '2px 8px',
+                    borderRadius: '20px',
+                    fontWeight: 600,
+                  }}
+                >
                   {pendingApprovals.length}
                 </span>
               )}
             </div>
             {pendingApprovals.length === 0 ? (
-              <p className="text-sm text-gray-500 text-center py-4">
+              <p style={{ fontSize: '13.5px', color: '#8e8e93', textAlign: 'center', padding: '20px 0' }}>
                 Nessuna approvazione in attesa
               </p>
             ) : (
-              <div className="space-y-3">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {pendingApprovals.map((task) => (
                   <Link
                     key={task.id}
                     href={`/partnerships/${task.content.partnership.id}`}
-                    className="flex items-center justify-between p-3 rounded-lg bg-orange-50 hover:bg-orange-100 transition-colors"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      background: '#fff8f0',
+                      textDecoration: 'none',
+                      transition: 'all 200ms ease',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#fff3e0' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = '#fff8f0' }}
                   >
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p style={{ fontSize: '13.5px', fontWeight: 600, color: '#1d1d1f', marginBottom: '2px' }}>
                         {task.content.partnership.name}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5">
+                      <p style={{ fontSize: '12px', color: '#6e6e73' }}>
                         {TASK_LABELS[task.type as TaskType]} · {CONTENT_TYPE_LABELS[task.content.type]} · {task.content.partnership.influencer.name}
                       </p>
                     </div>
-                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#8e8e93">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </Link>
@@ -163,35 +193,56 @@ export default async function DashboardPage() {
           </div>
 
           {/* Upcoming tasks */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-base font-semibold text-gray-900 mb-4">Task in Scadenza</h2>
+          <div
+            style={{
+              background: '#ffffff',
+              borderRadius: '12px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              border: '1px solid #f0f0f0',
+              padding: '20px',
+            }}
+          >
+            <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#1d1d1f', marginBottom: '16px' }}>
+              Task in Scadenza
+            </h2>
             {upcomingTasks.length === 0 ? (
-              <p className="text-sm text-gray-500 text-center py-4">
+              <p style={{ fontSize: '13.5px', color: '#8e8e93', textAlign: 'center', padding: '20px 0' }}>
                 Nessun task in scadenza
               </p>
             ) : (
-              <div className="space-y-3">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {upcomingTasks.map((task) => (
                   <Link
                     key={task.id}
                     href={`/partnerships/${task.content.partnership.id}`}
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      background: 'transparent',
+                      textDecoration: 'none',
+                      transition: 'all 200ms ease',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = '#f5f5f7' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
                   >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px', flexWrap: 'wrap' }}>
+                        <p style={{ fontSize: '13.5px', fontWeight: 600, color: '#1d1d1f', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {task.content.partnership.name}
                         </p>
                         <Badge variant={getTaskStatusVariant(task.status)}>
                           {getTaskStatusLabel(task.status)}
                         </Badge>
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">
+                      <p style={{ fontSize: '12px', color: '#6e6e73' }}>
                         {TASK_LABELS[task.type as TaskType]} · {task.content.partnership.influencer.name}
                       </p>
                     </div>
                     {task.dueDate && (
-                      <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                      <span style={{ fontSize: '12px', color: '#6e6e73', marginLeft: '8px', flexShrink: 0 }}>
                         {format(new Date(task.dueDate), 'dd/MM', { locale: it })}
                       </span>
                     )}
@@ -203,33 +254,87 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick actions */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Azioni Rapide</h2>
-          <div className="flex flex-wrap gap-3">
+        <div
+          style={{
+            background: '#ffffff',
+            borderRadius: '12px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            border: '1px solid #f0f0f0',
+            padding: '20px',
+          }}
+        >
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#1d1d1f', marginBottom: '16px' }}>
+            Azioni Rapide
+          </h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             <Link
               href="/partnerships/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7px',
+                padding: '8px 18px',
+                background: '#0071e3',
+                color: '#ffffff',
+                borderRadius: '980px',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                textDecoration: 'none',
+                transition: 'all 200ms ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#0077ed' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#0071e3' }}
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nuova Partnership
             </Link>
             <Link
               href="/brands/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7px',
+                padding: '8px 18px',
+                background: '#ffffff',
+                color: '#1d1d1f',
+                border: '1px solid #d2d2d7',
+                borderRadius: '980px',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                textDecoration: 'none',
+                transition: 'all 200ms ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#f5f5f7' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff' }}
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nuovo Brand
             </Link>
             <Link
               href="/influencers/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '7px',
+                padding: '8px 18px',
+                background: '#ffffff',
+                color: '#1d1d1f',
+                border: '1px solid #d2d2d7',
+                borderRadius: '980px',
+                fontSize: '13.5px',
+                fontWeight: 500,
+                textDecoration: 'none',
+                transition: 'all 200ms ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#f5f5f7' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff' }}
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nuovo Influencer
             </Link>
@@ -277,86 +382,117 @@ export default async function DashboardPage() {
   ])
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">La Mia Dashboard</h1>
-        <p className="text-gray-500 text-sm mt-1">
+    <div style={{ maxWidth: '900px' }}>
+      <div style={{ marginBottom: '28px' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#1d1d1f', letterSpacing: '-0.03em', marginBottom: '4px' }}>
+          La Mia Dashboard
+        </h1>
+        <p style={{ fontSize: '15px', color: '#6e6e73' }}>
           Bentornata, {session.user.name}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
         <StatCard
           title="Partnership Attive"
           value={myPartnerships.length}
-          colorClass="text-primary-600"
+          colorClass="text-[#0071e3]"
           icon={
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           }
         />
         <StatCard
           title="Task Attivi"
           value={myPendingTasks.filter((t) => t.status === TaskStatus.IN_PROGRESS).length}
-          colorClass="text-blue-600"
+          colorClass="text-[#0071e3]"
           icon={
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           }
         />
         <StatCard
           title="Revisioni da Fare"
           value={myPendingTasks.filter((t) => t.status === TaskStatus.REVISION_NEEDED).length}
-          colorClass="text-red-600"
+          colorClass="text-[#ff3b30]"
           icon={
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           }
         />
       </div>
 
       {/* My tasks */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">I Miei Task</h2>
+      <div
+        style={{
+          background: '#ffffff',
+          borderRadius: '12px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          border: '1px solid #f0f0f0',
+          padding: '20px',
+          marginBottom: '16px',
+        }}
+      >
+        <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#1d1d1f', marginBottom: '16px' }}>
+          I Miei Task
+        </h2>
         {myPendingTasks.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-8">
+          <p style={{ fontSize: '13.5px', color: '#8e8e93', textAlign: 'center', padding: '24px 0' }}>
             Nessun task attivo al momento
           </p>
         ) : (
-          <div className="space-y-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {myPendingTasks.map((task) => (
               <Link
                 key={task.id}
                 href={`/partnerships/${task.content.partnership.id}`}
-                className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-primary-200 hover:bg-primary-50/30 transition-colors"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 14px',
+                  borderRadius: '8px',
+                  border: '1px solid #f0f0f0',
+                  textDecoration: 'none',
+                  transition: 'all 200ms ease',
+                  background: '#ffffff',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#d2d2d7'
+                  e.currentTarget.style.background = '#fafafa'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#f0f0f0'
+                  e.currentTarget.style.background = '#ffffff'
+                }}
               >
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-medium text-gray-900">
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '3px' }}>
+                    <p style={{ fontSize: '13.5px', fontWeight: 600, color: '#1d1d1f' }}>
                       {TASK_LABELS[task.type as TaskType]}
                     </p>
                     <Badge variant={getTaskStatusVariant(task.status)}>
                       {getTaskStatusLabel(task.status)}
                     </Badge>
                   </div>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p style={{ fontSize: '12px', color: '#6e6e73' }}>
                     {task.content.partnership.name} · {task.content.partnership.brand.name} · {CONTENT_TYPE_LABELS[task.content.type]}
                   </p>
                   {task.revisionNotes && task.status === TaskStatus.REVISION_NEEDED && (
-                    <p className="text-xs text-red-600 mt-1">
+                    <p style={{ fontSize: '12px', color: '#ff3b30', marginTop: '4px' }}>
                       Note: {task.revisionNotes}
                     </p>
                   )}
                 </div>
                 {task.dueDate && (
-                  <div className="text-right ml-3 flex-shrink-0">
-                    <p className="text-xs font-medium text-gray-700">
+                  <div style={{ textAlign: 'right', marginLeft: '12px', flexShrink: 0 }}>
+                    <p style={{ fontSize: '12px', fontWeight: 600, color: '#1d1d1f' }}>
                       {format(new Date(task.dueDate), 'dd/MM/yyyy', { locale: it })}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p style={{ fontSize: '11px', color: '#6e6e73' }}>
                       {format(new Date(task.dueDate), 'HH:mm')}
                     </p>
                   </div>
@@ -368,19 +504,27 @@ export default async function DashboardPage() {
       </div>
 
       {/* My partnerships */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold text-gray-900">Partnership Attive</h2>
-          <Link href="/partnerships" className="text-sm text-primary-600 hover:text-primary-700">
+      <div
+        style={{
+          background: '#ffffff',
+          borderRadius: '12px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          border: '1px solid #f0f0f0',
+          padding: '20px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '15px', fontWeight: 600, color: '#1d1d1f' }}>Partnership Attive</h2>
+          <Link href="/partnerships" style={{ fontSize: '13.5px', color: '#0071e3', textDecoration: 'none', fontWeight: 500 }}>
             Vedi tutte →
           </Link>
         </div>
         {myPartnerships.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-8">
+          <p style={{ fontSize: '13.5px', color: '#8e8e93', textAlign: 'center', padding: '24px 0' }}>
             Nessuna partnership attiva
           </p>
         ) : (
-          <div className="space-y-3">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {myPartnerships.map((p) => {
               const totalTasks = p.contents.reduce((acc, c) => acc + c.tasks.length, 0)
               const completedTasks = p.contents.reduce((acc, c) => acc + c.tasks.filter((t) => t.status === 'COMPLETED').length, 0)
@@ -390,20 +534,41 @@ export default async function DashboardPage() {
                 <Link
                   key={p.id}
                   href={`/partnerships/${p.id}`}
-                  className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:border-primary-200 transition-colors"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px 14px',
+                    borderRadius: '8px',
+                    border: '1px solid #f0f0f0',
+                    textDecoration: 'none',
+                    transition: 'all 200ms ease',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#d2d2d7' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#f0f0f0' }}
                 >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{p.brand.name}</p>
-                    <div className="mt-2 w-full bg-gray-100 rounded-full h-1.5">
-                      <div className="bg-primary-600 h-1.5 rounded-full" style={{ width: `${progress}%` }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: '13.5px', fontWeight: 600, color: '#1d1d1f', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '2px' }}>
+                      {p.name}
+                    </p>
+                    <p style={{ fontSize: '12px', color: '#6e6e73', marginBottom: '8px' }}>{p.brand.name}</p>
+                    <div style={{ width: '100%', background: '#f0f0f0', borderRadius: '100px', height: '4px' }}>
+                      <div
+                        style={{
+                          background: '#0071e3',
+                          height: '4px',
+                          borderRadius: '100px',
+                          width: `${progress}%`,
+                          transition: 'width 400ms ease',
+                        }}
+                      />
                     </div>
                   </div>
-                  <div className="ml-4 text-right">
+                  <div style={{ marginLeft: '16px', textAlign: 'right', flexShrink: 0 }}>
                     <Badge variant={getPartnershipStatusVariant(p.status)}>
                       {getPartnershipStatusLabel(p.status)}
                     </Badge>
-                    <p className="text-xs text-gray-500 mt-1">{completedTasks}/{totalTasks} task</p>
+                    <p style={{ fontSize: '11px', color: '#6e6e73', marginTop: '4px' }}>{completedTasks}/{totalTasks} task</p>
                   </div>
                 </Link>
               )

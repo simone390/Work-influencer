@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -61,6 +60,7 @@ model Content {
   postLink         String?
   postInstructions String?
   postScheduledAt  DateTime?
+  contentStatus    String          @default("BOZZA")
   createdAt        DateTime        @default(now())
   partnership      Partnership     @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
   tasks            ContentTask[]
