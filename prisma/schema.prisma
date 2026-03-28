@@ -12,16 +12,11 @@ model User {
   name          String
   email         String         @unique
   password      String
-  role          UserRole       @default(INFLUENCER)
+  role          String         @default("INFLUENCER")
   pushToken     String?
   createdAt     DateTime       @default(now())
   partnerships  Partnership[]
   notifications Notification[]
-}
-
-enum UserRole {
-  MANAGER
-  INFLUENCER
 }
 
 model Brand {
@@ -34,86 +29,55 @@ model Brand {
 }
 
 model Partnership {
-  id           String            @id @default(cuid())
+  id           String     @id @default(cuid())
   name         String
   brandId      String
   influencerId String
   totalPrice   Float
   netPrice     Float
   brief        String?
-  status       PartnershipStatus @default(ACTIVE)
-  createdAt    DateTime          @default(now())
-  brand        Brand             @relation(fields: [brandId], references: [id])
-  influencer   User              @relation(fields: [influencerId], references: [id])
+  status       String     @default("ACTIVE")
+  createdAt    DateTime   @default(now())
+  brand        Brand      @relation(fields: [brandId], references: [id])
+  influencer   User       @relation(fields: [influencerId], references: [id])
   contents     Content[]
 }
 
-enum PartnershipStatus {
-  ACTIVE
-  COMPLETED
-  PAUSED
-}
-
 model Content {
-  id               String         @id @default(cuid())
+  id               String          @id @default(cuid())
   partnershipId    String
-  type             ContentType
+  type             String
   description      String?
   postLink         String?
   postInstructions String?
   postScheduledAt  DateTime?
-  createdAt        DateTime       @default(now())
-  partnership      Partnership    @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
+  createdAt        DateTime        @default(now())
+  partnership      Partnership     @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
   tasks            ContentTask[]
   metrics          ContentMetric[]
 }
 
-enum ContentType {
-  REEL
-  STORY
-  POST
-  VIDEO
-  OTHER
-}
-
 model ContentTask {
-  id            String     @id @default(cuid())
+  id            String    @id @default(cuid())
   contentId     String
-  type          TaskType
-  status        TaskStatus @default(PENDING)
+  type          String
+  status        String    @default("PENDING")
   dueDate       DateTime?
   notes         String?
   revisionNotes String?
   completedAt   DateTime?
   order         Int
-  createdAt     DateTime   @default(now())
-  content       Content    @relation(fields: [contentId], references: [id], onDelete: Cascade)
-}
-
-enum TaskType {
-  WRITE_SCRIPT
-  BRAND_APPROVAL
-  RECORD_CONTENT
-  BRAND_REVIEW
-  POST_CONTENT
-  REPORTING
-  SUBMIT_INVOICE
-}
-
-enum TaskStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-  REVISION_NEEDED
+  createdAt     DateTime  @default(now())
+  content       Content   @relation(fields: [contentId], references: [id], onDelete: Cascade)
 }
 
 model ContentMetric {
-  id          String   @id @default(cuid())
-  contentId   String
-  views       Int      @default(0)
-  linkClicks  Int      @default(0)
-  reportedAt  DateTime @default(now())
-  content     Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  contentId  String
+  views      Int      @default(0)
+  linkClicks Int      @default(0)
+  reportedAt DateTime @default(now())
+  content    Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
 }
 
 model Notification {

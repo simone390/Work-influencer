@@ -1,4 +1,4 @@
-import { PrismaClient, UserRole, PartnershipStatus, ContentType, TaskType, TaskStatus } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { addDays } from 'date-fns'
 
@@ -16,7 +16,7 @@ async function main() {
       name: 'Marco Bianchi',
       email: 'manager@test.com',
       password: managerPassword,
-      role: UserRole.MANAGER,
+      role: 'MANAGER',
     },
   })
   console.log('Manager created:', manager.email)
@@ -30,7 +30,7 @@ async function main() {
       name: 'Sofia Rossi',
       email: 'influencer@test.com',
       password: influencerPassword,
-      role: UserRole.INFLUENCER,
+      role: 'INFLUENCER',
     },
   })
   console.log('Influencer created:', influencer.email)
@@ -56,7 +56,7 @@ async function main() {
       totalPrice: 2500,
       netPrice: 2000,
       brief: 'Campagna di lancio del nuovo smartphone TechBrand X1. Mostrare le funzionalità della fotocamera e la durata della batteria.',
-      status: PartnershipStatus.ACTIVE,
+      status: 'ACTIVE',
     },
   })
   console.log('Partnership created:', partnership.name)
@@ -71,7 +71,7 @@ async function main() {
   const content = await prisma.content.create({
     data: {
       partnershipId: partnership.id,
-      type: ContentType.REEL,
+      type: 'REEL',
       description: 'Reel Instagram che mostra le funzionalità della fotocamera',
       postInstructions: 'Taggare @TechBrandItalia, usare hashtag #TechBrandX1 #Fotografia #Tech',
       postScheduledAt: postDateTime,
@@ -84,49 +84,49 @@ async function main() {
     data: [
       {
         contentId: content.id,
-        type: TaskType.WRITE_SCRIPT,
-        status: TaskStatus.IN_PROGRESS,
+        type: 'WRITE_SCRIPT',
+        status: 'IN_PROGRESS',
         dueDate: scriptDeadline,
         order: 1,
         notes: 'Scrivi lo script per il reel della fotocamera',
       },
       {
         contentId: content.id,
-        type: TaskType.BRAND_APPROVAL,
-        status: TaskStatus.PENDING,
+        type: 'BRAND_APPROVAL',
+        status: 'PENDING',
         order: 2,
       },
       {
         contentId: content.id,
-        type: TaskType.RECORD_CONTENT,
-        status: TaskStatus.PENDING,
+        type: 'RECORD_CONTENT',
+        status: 'PENDING',
         dueDate: recordingDeadline,
         order: 3,
       },
       {
         contentId: content.id,
-        type: TaskType.BRAND_REVIEW,
-        status: TaskStatus.PENDING,
+        type: 'BRAND_REVIEW',
+        status: 'PENDING',
         order: 4,
       },
       {
         contentId: content.id,
-        type: TaskType.POST_CONTENT,
-        status: TaskStatus.PENDING,
+        type: 'POST_CONTENT',
+        status: 'PENDING',
         dueDate: postDateTime,
         order: 5,
       },
       {
         contentId: content.id,
-        type: TaskType.REPORTING,
-        status: TaskStatus.PENDING,
+        type: 'REPORTING',
+        status: 'PENDING',
         dueDate: addDays(postDate, 7),
         order: 6,
       },
       {
         contentId: content.id,
-        type: TaskType.SUBMIT_INVOICE,
-        status: TaskStatus.PENDING,
+        type: 'SUBMIT_INVOICE',
+        status: 'PENDING',
         order: 7,
       },
     ],
@@ -148,7 +148,7 @@ async function main() {
   const storyContent = await prisma.content.create({
     data: {
       partnershipId: partnership.id,
-      type: ContentType.STORY,
+      type: 'STORY',
       description: 'Story Instagram con swipe-up link al prodotto',
       postInstructions: 'Inserire link swipe-up alla pagina prodotto. Taggare @TechBrandItalia',
       postScheduledAt: addDays(postDateTime, 1),
@@ -163,48 +163,48 @@ async function main() {
     data: [
       {
         contentId: storyContent.id,
-        type: TaskType.WRITE_SCRIPT,
-        status: TaskStatus.PENDING,
+        type: 'WRITE_SCRIPT',
+        status: 'PENDING',
         dueDate: storyScriptDeadline,
         order: 1,
       },
       {
         contentId: storyContent.id,
-        type: TaskType.BRAND_APPROVAL,
-        status: TaskStatus.PENDING,
+        type: 'BRAND_APPROVAL',
+        status: 'PENDING',
         order: 2,
       },
       {
         contentId: storyContent.id,
-        type: TaskType.RECORD_CONTENT,
-        status: TaskStatus.PENDING,
+        type: 'RECORD_CONTENT',
+        status: 'PENDING',
         dueDate: storyRecordingDeadline,
         order: 3,
       },
       {
         contentId: storyContent.id,
-        type: TaskType.BRAND_REVIEW,
-        status: TaskStatus.PENDING,
+        type: 'BRAND_REVIEW',
+        status: 'PENDING',
         order: 4,
       },
       {
         contentId: storyContent.id,
-        type: TaskType.POST_CONTENT,
-        status: TaskStatus.PENDING,
+        type: 'POST_CONTENT',
+        status: 'PENDING',
         dueDate: storyPostDate,
         order: 5,
       },
       {
         contentId: storyContent.id,
-        type: TaskType.REPORTING,
-        status: TaskStatus.PENDING,
+        type: 'REPORTING',
+        status: 'PENDING',
         dueDate: addDays(storyPostDate, 7),
         order: 6,
       },
       {
         contentId: storyContent.id,
-        type: TaskType.SUBMIT_INVOICE,
-        status: TaskStatus.PENDING,
+        type: 'SUBMIT_INVOICE',
+        status: 'PENDING',
         order: 7,
       },
     ],
