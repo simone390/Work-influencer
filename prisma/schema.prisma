@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  password      String
+  role          UserRole       @default(INFLUENCER)
+  pushToken     String?
+  createdAt     DateTime       @default(now())
+  partnerships  Partnership[]
+  notifications Notification[]
+}
+
+enum UserRole {
+  MANAGER
+  INFLUENCER
+}
+
+model Brand {
+  id           String        @id @default(cuid())
+  name         String
+  logo         String?
+  publicToken  String        @unique @default(cuid())
+  createdAt    DateTime      @default(now())
+  partnerships Partnership[]
+}
+
+model Partnership {
+  id           String            @id @default(cuid())
+  name         String
+  brandId      String
+  influencerId String
+  totalPrice   Float
+  netPrice     Float
+  brief        String?
+  status       PartnershipStatus @default(ACTIVE)
+  createdAt    DateTime          @default(now())
+  brand        Brand             @relation(fields: [brandId], references: [id])
+  influencer   User              @relation(fields: [influencerId], references: [id])
+  contents     Content[]
+}
+
+enum PartnershipStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+model Content {
+  id               String         @id @default(cuid())
+  partnershipId    String
+  type             ContentType
+  description      String?
+  postLink         String?
+  postInstructions String?
+  postScheduledAt  DateTime?
+  createdAt        DateTime       @default(now())
+  partnership      Partnership    @relation(fields: [partnershipId], references: [id], onDelete: Cascade)
+  tasks            ContentTask[]
+  metrics          ContentMetric[]
+}
+
+enum ContentType {
+  REEL
+  STORY
+  POST
+  VIDEO
+  OTHER
+}
+
+model ContentTask {
+  id            String     @id @default(cuid())
+  contentId     String
+  type          TaskType
+  status        TaskStatus @default(PENDING)
+  dueDate       DateTime?
+  notes         String?
+  revisionNotes String?
+  completedAt   DateTime?
+  order         Int
+  createdAt     DateTime   @default(now())
+  content       Content    @relation(fields: [contentId], references: [id], onDelete: Cascade)
+}
+
+enum TaskType {
+  WRITE_SCRIPT
+  BRAND_APPROVAL
+  RECORD_CONTENT
+  BRAND_REVIEW
+  POST_CONTENT
+  REPORTING
+  SUBMIT_INVOICE
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  REVISION_NEEDED
+}
+
+model ContentMetric {
+  id          String   @id @default(cuid())
+  contentId   String
+  views       Int      @default(0)
+  linkClicks  Int      @default(0)
+  reportedAt  DateTime @default(now())
+  content     Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
