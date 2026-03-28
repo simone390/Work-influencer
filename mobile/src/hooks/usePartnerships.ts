@@ -12,10 +12,10 @@ export function usePartnerships() {
     setError(null)
     try {
       const params = status ? { status } : {}
-      const res = await api.get<{ partnerships: Partnership[] }>('/api/partnerships', {
+      const res = await api.get<Partnership[]>('/api/partnerships', {
         params,
       })
-      setPartnerships(res.data.partnerships ?? [])
+      setPartnerships(Array.isArray(res.data) ? res.data : [])
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { error?: string } } })?.response?.data?.error ??
