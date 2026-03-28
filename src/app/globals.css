@@ -1,63 +1,189 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --bg-page: #f5f5f7;
+    --bg-card: #ffffff;
+    --color-primary: #0071e3;
+    --color-primary-hover: #0077ed;
+    --color-primary-light: #e8f0fd;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --border-color: #d2d2d7;
+    --border-light: #f0f0f0;
+    --color-success: #34c759;
+    --color-warning: #ff9500;
+    --color-error: #ff3b30;
+    --radius-card: 12px;
+    --radius-input: 8px;
+    --radius-pill: 20px;
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --transition: 200ms ease;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 }
 
 @layer components {
+  /* Buttons */
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 8px 18px;
+    border-radius: 980px;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: -0.01em;
+  }
+  .btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-0.5px);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg border border-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: var(--color-primary);
+    font-weight: 500;
+    font-size: 14px;
+    padding: 7px 17px;
+    border-radius: 980px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all var(--transition);
+    background-color: #ffffff;
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary-light);
+  }
+  .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .btn-danger {
-    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-error);
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 8px 18px;
+    border-radius: 980px;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .btn-danger:hover {
+    background-color: #e0352a;
+    transform: translateY(-0.5px);
   }
 
+  /* Input fields */
   .input-field {
-    @apply block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-colors duration-200;
+    display: block;
+    width: 100%;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--border-color);
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background-color: #ffffff;
+    transition: all var(--transition);
+    outline: none;
+    font-family: inherit;
+  }
+  .input-field::placeholder {
+    color: #b0b0b5;
+  }
+  .input-field:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12);
+  }
+  .input-field:disabled {
+    background-color: #f5f5f7;
+    color: var(--text-secondary);
+    cursor: not-allowed;
   }
 
+  /* Card */
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+    background-color: var(--bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+    padding: 24px;
+  }
+
+  /* Badge / Pills */
+  .badge-base {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
 
   .badge-pending {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800;
+    background-color: #fff3e0;
+    color: #e65100;
   }
-
   .badge-in-progress {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800;
+    background-color: #e8f0fd;
+    color: #0071e3;
   }
-
   .badge-completed {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800;
+    background-color: #e8f5e9;
+    color: #1b5e20;
   }
-
   .badge-revision {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800;
+    background-color: #ffeef0;
+    color: #c62828;
   }
-
   .badge-active {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800;
+    background-color: #e8f5e9;
+    color: #2e7d32;
   }
-
   .badge-paused {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800;
+    background-color: #f5f5f7;
+    color: var(--text-secondary);
   }
 }

@@ -12,6 +12,7 @@ type BadgeVariant =
   | 'green'
   | 'red'
   | 'yellow'
+  | 'orange'
 
 interface BadgeProps {
   variant: BadgeVariant
@@ -20,23 +21,24 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  in_progress: 'bg-blue-100 text-blue-800',
-  completed: 'bg-green-100 text-green-800',
-  revision: 'bg-red-100 text-red-800',
-  active: 'bg-green-100 text-green-800',
-  paused: 'bg-gray-100 text-gray-700',
-  gray: 'bg-gray-100 text-gray-700',
-  blue: 'bg-blue-100 text-blue-800',
-  green: 'bg-green-100 text-green-800',
-  red: 'bg-red-100 text-red-800',
-  yellow: 'bg-yellow-100 text-yellow-800',
+  pending: 'bg-[#fff3e0] text-[#e65100]',
+  in_progress: 'bg-[#e8f0fd] text-[#0071e3]',
+  completed: 'bg-[#e8f5e9] text-[#2e7d32]',
+  revision: 'bg-[#ffeef0] text-[#c62828]',
+  active: 'bg-[#e8f5e9] text-[#2e7d32]',
+  paused: 'bg-[#f5f5f7] text-[#6e6e73]',
+  gray: 'bg-[#f5f5f7] text-[#6e6e73]',
+  blue: 'bg-[#e8f0fd] text-[#0071e3]',
+  green: 'bg-[#e8f5e9] text-[#2e7d32]',
+  red: 'bg-[#ffeef0] text-[#c62828]',
+  yellow: 'bg-[#fff3e0] text-[#e65100]',
+  orange: 'bg-[#fff3e0] text-[#e65100]',
 }
 
 export function Badge({ variant, children, className = '' }: BadgeProps) {
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${variantClasses[variant]} ${className}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-[20px] text-[11px] font-semibold tracking-wide uppercase ${variantClasses[variant]} ${className}`}
     >
       {children}
     </span>

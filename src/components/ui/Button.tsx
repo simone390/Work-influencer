@@ -19,22 +19,22 @@ export function Button({
   ...props
 }: ButtonProps) {
   const baseClasses =
-    'inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+    'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed select-none'
 
   const variantClasses = {
     primary:
-      'bg-primary-600 hover:bg-primary-700 text-white focus:ring-primary-500',
+      'bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-[980px] hover:-translate-y-px focus:shadow-[0_0_0_3px_rgba(0,113,227,0.25)]',
     secondary:
-      'bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 focus:ring-primary-500',
-    danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500',
+      'bg-white hover:bg-[#e8f0fd] text-[#0071e3] border border-[#d2d2d7] hover:border-[#0071e3] rounded-[980px] focus:shadow-[0_0_0_3px_rgba(0,113,227,0.12)]',
+    danger: 'bg-[#ff3b30] hover:bg-[#e0352a] text-white rounded-[980px] hover:-translate-y-px focus:shadow-[0_0_0_3px_rgba(255,59,48,0.25)]',
     ghost:
-      'bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-primary-500',
+      'bg-transparent hover:bg-[#f5f5f7] text-[#1d1d1f] rounded-[8px] focus:shadow-[0_0_0_3px_rgba(0,113,227,0.12)]',
   }
 
   const sizeClasses = {
-    sm: 'py-1.5 px-3 text-xs',
-    md: 'py-2 px-4 text-sm',
-    lg: 'py-2.5 px-5 text-base',
+    sm: 'py-1.5 px-3.5 text-xs',
+    md: 'py-2 px-[18px] text-sm',
+    lg: 'py-2.5 px-6 text-sm',
   }
 
   return (

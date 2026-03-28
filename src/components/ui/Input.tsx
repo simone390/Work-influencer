@@ -23,23 +23,23 @@ export function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-[#1d1d1f] mb-1.5"
         >
           {label}
         </label>
       )}
       <input
         id={inputId}
-        className={`block w-full rounded-lg border px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 transition-colors duration-200 ${
+        className={`block w-full rounded-[8px] border px-3.5 py-2.5 text-sm text-[#1d1d1f] placeholder-[#b0b0b5] focus:outline-none focus:ring-[3px] transition-all duration-200 bg-white font-[inherit] ${
           error
-            ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-            : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500'
-        } disabled:bg-gray-50 disabled:text-gray-500 ${className}`}
+            ? 'border-[#ff3b30] focus:border-[#ff3b30] focus:ring-[rgba(255,59,48,0.12)]'
+            : 'border-[#d2d2d7] focus:border-[#0071e3] focus:ring-[rgba(0,113,227,0.12)]'
+        } disabled:bg-[#f5f5f7] disabled:text-[#6e6e73] disabled:cursor-not-allowed ${className}`}
         {...props}
       />
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1.5 text-xs text-[#ff3b30]">{error}</p>}
       {helpText && !error && (
-        <p className="mt-1 text-xs text-gray-500">{helpText}</p>
+        <p className="mt-1.5 text-xs text-[#6e6e73]">{helpText}</p>
       )}
     </div>
   )
@@ -66,24 +66,24 @@ export function Textarea({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-[#1d1d1f] mb-1.5"
         >
           {label}
         </label>
       )}
       <textarea
         id={inputId}
-        className={`block w-full rounded-lg border px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 transition-colors duration-200 resize-none ${
+        className={`block w-full rounded-[8px] border px-3.5 py-2.5 text-sm text-[#1d1d1f] placeholder-[#b0b0b5] focus:outline-none focus:ring-[3px] transition-all duration-200 resize-none bg-white font-[inherit] ${
           error
-            ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-            : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500'
-        } disabled:bg-gray-50 disabled:text-gray-500 ${className}`}
+            ? 'border-[#ff3b30] focus:border-[#ff3b30] focus:ring-[rgba(255,59,48,0.12)]'
+            : 'border-[#d2d2d7] focus:border-[#0071e3] focus:ring-[rgba(0,113,227,0.12)]'
+        } disabled:bg-[#f5f5f7] disabled:text-[#6e6e73] disabled:cursor-not-allowed ${className}`}
         rows={3}
         {...props}
       />
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1.5 text-xs text-[#ff3b30]">{error}</p>}
       {helpText && !error && (
-        <p className="mt-1 text-xs text-gray-500">{helpText}</p>
+        <p className="mt-1.5 text-xs text-[#6e6e73]">{helpText}</p>
       )}
     </div>
   )
