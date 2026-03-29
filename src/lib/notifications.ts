@@ -2,13 +2,14 @@ import { prisma } from './prisma'
 import { format } from 'date-fns'
 import { it } from 'date-fns/locale'
 import { TaskType, TaskStatus } from './workflow'
+import { sendWebPushNotification } from './webpush'
 
 export async function sendNotification(
   userId: string,
   title: string,
   body: string
 ) {
-  return prisma.notification.create({
+  const notification = await prisma.notification.create({
     data: {
       userId,
       title,
@@ -16,6 +17,33 @@ export async function sendNotification(
       read: false,
     },
   })
+
+  // Also send web push notifications to all subscriptions for this user
+  try {
+    const subscriptions = await prisma.pushSubscription.findMany({
+      where: { userId },
+    })
+
+    await Promise.allSettled(
+      subscriptions.map(async (sub) => {
+        try {
+          await sendWebPushNotification(
+            { endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } },
+            { title, body }
+          )
+        } catch (error: any) {
+          if (error.statusCode === 410 || error.statusCode === 404) {
+            // Subscription expired or gone — remove from DB
+            await prisma.pushSubscription.delete({ where: { id: sub.id } }).catch(() => {})
+          }
+        }
+      })
+    )
+  } catch (error) {
+    console.error('Error sending web push notifications:', error)
+  }
+
+  return notification
 }
 
 export async function sendTaskNotification(

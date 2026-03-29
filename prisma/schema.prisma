@@ -9,17 +9,28 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
-  name          String
-  email         String         @unique
-  password      String
-  role          String         @default("INFLUENCER")
-  pushToken     String?
-  createdAt     DateTime       @default(now())
-  partnerships  Partnership[]
-  notifications Notification[]
-  invoices      Invoice[]
-  sentMessages  Message[]
+  id                String             @id @default(cuid())
+  name              String
+  email             String             @unique
+  password          String
+  role              String             @default("INFLUENCER")
+  pushToken         String?
+  createdAt         DateTime           @default(now())
+  partnerships      Partnership[]
+  notifications     Notification[]
+  invoices          Invoice[]
+  sentMessages      Message[]
+  pushSubscriptions PushSubscription[]
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Brand {
