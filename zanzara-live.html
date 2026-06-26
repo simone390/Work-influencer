@@ -123,28 +123,28 @@
 
     <p class="desc">
       Simula una puntata de <strong>La Zanzara</strong> con Cruciani come intervistatore AI.<br>
-      Serve una API key Google Gemini — <strong>è gratis</strong>, bastano 30 secondi.
+      Serve una API key Groq — <strong>completamente gratis</strong>, bastano 30 secondi.
     </p>
 
     <div class="steps">
       <div style="font-size:12px;font-weight:700;color:#aaa;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px">Come ottenere la key gratuita</div>
       <div class="step">
         <div class="step-n">1</div>
-        <span>Vai su <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> (account Google)</span>
+        <span>Vai su <a href="https://console.groq.com" target="_blank">console.groq.com</a> → login con Google</span>
       </div>
       <div class="step">
         <div class="step-n">2</div>
-        <span>Clicca <strong style="color:#fff">Create API key</strong></span>
+        <span>Clicca <strong style="color:#fff">API Keys</strong> → <strong style="color:#fff">Create API Key</strong></span>
       </div>
       <div class="step">
         <div class="step-n">3</div>
-        <span>Copia e incolla qui sotto — nessuna carta richiesta</span>
+        <span>Copia la key (inizia con <strong style="color:#fff">gsk_</strong>) e incollala qui sotto</span>
       </div>
     </div>
 
     <div class="field">
-      <label>Google Gemini API Key <span class="free-badge">GRATIS</span></label>
-      <input type="password" id="keyInput" placeholder="Incolla qui la tua API key..." autocomplete="off">
+      <label>Groq API Key <span class="free-badge">GRATIS</span></label>
+      <input type="password" id="keyInput" placeholder="gsk_..." autocomplete="off">
       <span class="hint">La key resta solo nel tuo browser, non viene mai condivisa</span>
     </div>
 
@@ -264,7 +264,7 @@ const TOPICS = {
 let key='', msgs=[], timer=null, secs=0, topic=null, busy=false;
 
 onload = () => {
-  const k = localStorage.getItem('z_gkey');
+  const k = localStorage.getItem('z_groqkey');
   if(k){ key=k; document.getElementById('keyInput').value=k; showApp(); }
   document.getElementById('keyInput').addEventListener('keydown', e => { if(e.key==='Enter') initApp(); });
   document.getElementById('mta').addEventListener('input', updBtn);
@@ -273,8 +273,8 @@ onload = () => {
 
 function initApp(){
   const k = document.getElementById('keyInput').value.trim();
-  if(!k || k.length < 10){ showSetupErr('Incolla la API key completa da aistudio.google.com/apikey'); return; }
-  key=k; localStorage.setItem('z_gkey',k);
+  if(!k || k.length < 10){ showSetupErr('Incolla la API key completa da console.groq.com'); return; }
+  key=k; localStorage.setItem('z_groqkey',k);
   document.getElementById('setupErr').style.display='none';
   showApp();
 }
@@ -332,28 +332,42 @@ async function send(){
 }
 
 async function callGemini(history, intro){
-  // Build system instruction + history
   const sysText = intro ? SYS+'\n\nARGOMENTO DI OGGI: '+intro : SYS;
 
-  // Gemini expects: systemInstruction + contents
+  // Convert history to OpenAI format
+  const chatHistory = history.map(m => ({
+    role: m.role === 'model' ? 'assistant' : 'user',
+    content: m.parts[0].text
+  }));
+
+  if(!chatHistory.length){
+    chatHistory.push({ role:'user', content:'Inizia la trasmissione.' });
+  }
+
   const body = {
-    systemInstruction: { parts:[{text: sysText}] },
-    contents: history.length ? history : [{role:'user',parts:[{text:'Inizia la trasmissione.'}]}],
-    generationConfig: { maxOutputTokens: 400, temperature: 1.0 }
+    model: 'llama-3.3-70b-versatile',
+    messages: [
+      { role:'system', content: sysText },
+      ...chatHistory
+    ],
+    max_tokens: 400,
+    temperature: 1.0
   };
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
-    { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) }
-  );
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+key },
+    body: JSON.stringify(body)
+  });
+
   if(!res.ok){
     const e=await res.json().catch(()=>({}));
     const msg = e.error?.message || `Errore ${res.status}`;
-    if(res.status===400 && msg.includes('API_KEY')) throw new Error('API key non valida. Controllala su aistudio.google.com/apikey');
+    if(res.status===401) throw new Error('API key non valida. Controlla su console.groq.com → API Keys');
     throw new Error(msg);
   }
   const d=await res.json();
-  return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return d.choices?.[0]?.message?.content || '';
 }
 
 function addBubble(who,initials,text,fullName){
