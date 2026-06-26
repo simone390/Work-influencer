@@ -144,7 +144,7 @@
 
     <div class="field">
       <label>Google Gemini API Key <span class="free-badge">GRATIS</span></label>
-      <input type="password" id="keyInput" placeholder="AIzaSy..." autocomplete="off">
+      <input type="password" id="keyInput" placeholder="Incolla qui la tua API key..." autocomplete="off">
       <span class="hint">La key resta solo nel tuo browser, non viene mai condivisa</span>
     </div>
 
@@ -273,7 +273,7 @@ onload = () => {
 
 function initApp(){
   const k = document.getElementById('keyInput').value.trim();
-  if(!k.startsWith('AIza')){ showSetupErr('La key deve iniziare con "AIza..." — vai su aistudio.google.com/apikey'); return; }
+  if(!k || k.length < 10){ showSetupErr('Incolla la API key completa da aistudio.google.com/apikey'); return; }
   key=k; localStorage.setItem('z_gkey',k);
   document.getElementById('setupErr').style.display='none';
   showApp();
